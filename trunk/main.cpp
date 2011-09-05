@@ -52,5 +52,9 @@ int main( int argc, char *argv[] )
 		std::cout << "\n";
 	}
 
+	std::cout << "Value of (0, 0) is " << csvParser[0][0].GetInt() << "\n";
+	std::cout << "Rating for second metahuman is " 
+			  << csvParser.GetContentForHeaderAt("rating", 1).GetFloat() << "\n";
+
 	return 0;
 }

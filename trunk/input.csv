@@ -1,8 +1,8 @@
 "id","metahuman","alterego","rating"
-"int","string","string","int"
-0,"batman","bruce wayne",10
-1,"superman","clark kent",9
-2,"spiderman","peter parker",8
-3,"flash","wally west",6
-4,"green lantern","hal jordan",6
-5,"howard the duck","none",-1
+"int","string","string","float"
+0,"batman","bruce wayne",10.0
+1,"superman","clark kent",9.2
+2,"spiderman","peter parker",8.7
+3,"flash","wally west",6.5
+4,"green lantern","hal jordan",6.2
+5,"howard the duck","none",0.0

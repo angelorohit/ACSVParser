@@ -1,4 +1,4 @@
-			
+																				
 // Copyright (c) 2011 Angelo Rohit Joseph Pulikotil
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,7 +23,7 @@
 #include <fstream>
 #include <iterator>
 #include <algorithm>
-#include <cassert>
+#include <cctype>
 
 using namespace acsvparser;
 
@@ -59,7 +59,6 @@ const bool ACSVParser::ParseFile(const std::string &fileName,
 
 			if( !ParseString(pBuffer, sizeRead, parseState) )
 			{
-				_errorState = ERRORSTATE_FAILED_TO_PARSE_CONTENT;
 				result = false;
 				break;
 			}
@@ -80,7 +79,6 @@ const bool ACSVParser::ParseFile(const std::string &fileName,
 
 		if( !ParseString(strBuffer) )
 		{
-			_errorState = ERRORSTATE_FAILED_TO_PARSE_CONTENT;
 			result = false;
 		}
 	}
@@ -94,7 +92,6 @@ const bool ACSVParser::ParseString(const ACSVParser::StringType &strContent)
 	_vVData.clear();
 	if( !ParseString(strContent.c_str(), strContent.length(), ParseState()) )
 	{
-		_errorState = ERRORSTATE_FAILED_TO_PARSE_CONTENT;
 		return false;
 	}
 
@@ -126,7 +123,7 @@ const bool ACSVParser::ParseString(const StringValueType * const pStrContent,
 			{
 				_vVData.push_back(RowDataType());
 			}
-			_vVData.back().push_back(strData);
+			_vVData.back().push_back(TypeData(strData));
 			strData.clear();
 		}
 		else if( token == _recordSeparator && 
@@ -138,7 +135,7 @@ const bool ACSVParser::ParseString(const StringValueType * const pStrContent,
 				{
 					_vVData.push_back(RowDataType());
 				}
-				_vVData.back().push_back(strData);
+				_vVData.back().push_back(TypeData(strData));
 				strData.clear();
 			}
 
@@ -156,13 +153,22 @@ const bool ACSVParser::ParseString(const StringValueType * const pStrContent,
 		{
 			_vVData.push_back(RowDataType());
 		}
-		_vVData.back().push_back(strData);
+		_vVData.back().push_back(TypeData(strData));
+	}
+
+	if( _hasTypeRow )
+	{
+		if( !ProcessDataTypes() )
+		{
+			_errorState = ERRORSTATE_FAILED_TO_PROCESS_TYPEDATA;
+			return false;
+		}
 	}
 
 	return true;
 }
 
-ACSVParser::StringType ACSVParser::GetContentForHeaderAt(
+ACSVParser::TypeData ACSVParser::GetContentForHeaderAt(
 							const ACSVParser::StringType &headerStr, 
 							const ACSVParser::RowDataSizeType row) const
 {
@@ -175,11 +181,15 @@ ACSVParser::StringType ACSVParser::GetContentForHeaderAt(
 			// header content into another vector.
 			// Then do a string binary search instead of the current linear 
 			// search and find the corresponding column for the header.
-			// This comes at the cost of extra storage for 
-			// the header information.
 
-			RowDataType::const_iterator colIter = 
-				std::find(_vVData[_headerRow].begin(), _vVData[_headerRow].end(), headerStr);
+			RowDataType::const_iterator colIter = _vVData[_headerRow].begin();
+			while( colIter != _vVData[_headerRow].end() )
+			{
+				if( colIter->GetString() == headerStr )
+					break;
+				++colIter;
+			}
+
 			if( colIter != _vVData[_headerRow].end() )
 			{
 				const RowDataSizeType col = 
@@ -189,7 +199,7 @@ ACSVParser::StringType ACSVParser::GetContentForHeaderAt(
 		}
 	}
 
-	return StringType();
+	return TypeData("");
 }
 
 ACSVParser::Type ACSVParser::GetTypeAt(const DataSizeType row,
@@ -197,19 +207,52 @@ ACSVParser::Type ACSVParser::GetTypeAt(const DataSizeType row,
 {
 	if( _hasTypeRow )
 	{
-		// TODO: Can be optimized by saving the
-		// type content into another vector when parsing itself
-		// or when the type row is set.
-
 		const RowDataSizeType actualRow = row + _rowsToSkip;
-		const std::string typeStr = _vVData[_typeRow][col];
-		// TODO: Convert typeStr to lowercase.
-		if( typeStr == "int" )
-			return TYPE_INT;
+		StringType typeStr = _vVData[_typeRow][col].GetString();
+		// Convert typeStr to lowercase.
+		std::transform(typeStr.begin(), typeStr.end(), typeStr.begin(), 
+						::tolower);
+
+		if( typeStr == "bool" )
+			return TYPE_BOOL;
+		else if( typeStr == "uchar" )
+			return TYPE_UCHAR;
 		else if( typeStr == "char" )
 			return TYPE_CHAR;
+		else if( typeStr == "uint" )
+			return TYPE_UINT;
+		else if( typeStr == "int" )
+			return TYPE_INT;
+		else if( typeStr == "float" )
+			return TYPE_FLOAT;
+		else if( typeStr == "double" )
+			return TYPE_DOUBLE;
+		else if( typeStr == "string" )
+			return TYPE_STRING;
 	}
 
 	// Unrecognized types default to string.
 	return TYPE_STRING;
+}
+
+const bool ACSVParser::ProcessDataTypes()
+{
+	if( _hasTypeRow )
+	{
+		const DataSizeType noOfRows = GetRowCount();
+		for(DataSizeType i = 0; i < noOfRows; ++i)
+		{
+			const RowDataSizeType noOfCols = GetColumnCount(i);
+			for(RowDataSizeType j = 0; j < noOfCols; ++j)
+			{
+				TypeData& typeData = _vVData[i + _rowsToSkip][j];	
+				if( !typeData.ProcessDataType(GetTypeAt(i, j)) )
+					return false;
+			}
+		}
+
+		return true;
+	}
+
+	return false;
 }
