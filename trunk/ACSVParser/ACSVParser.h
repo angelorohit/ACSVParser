@@ -281,6 +281,6 @@ namespace acsvparser
 			return out;
 		}
 	};
-}
+}	// namespace acsvparser
 
-#endif
+#endif	// ACSVPARSER_HEADER

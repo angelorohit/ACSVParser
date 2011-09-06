@@ -177,11 +177,6 @@ ACSVParser::TypeData ACSVParser::GetContentForHeaderAt(
 		const RowDataSizeType actualRow = row + _rowsToSkip;
 		if( _vVData.size() > actualRow)
 		{
-			// TODO: Can be optimized by sorting the 
-			// header content into another vector.
-			// Then do a string binary search instead of the current linear 
-			// search and find the corresponding column for the header.
-
 			RowDataType::const_iterator colIter = _vVData[_headerRow].begin();
 			while( colIter != _vVData[_headerRow].end() )
 			{
