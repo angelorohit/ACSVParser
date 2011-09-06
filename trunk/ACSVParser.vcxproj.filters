@@ -17,6 +17,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="input.csv" />
+    <None Include="sample.csv" />
   </ItemGroup>
 </Project>

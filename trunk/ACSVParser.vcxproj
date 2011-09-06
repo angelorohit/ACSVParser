@@ -18,7 +18,7 @@
     <ClInclude Include="ACSVParser\ACSVParser.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="input.csv" />
+    <None Include="sample.csv" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{22A18539-B3C0-4653-863B-C0C6078E6A64}</ProjectGuid>

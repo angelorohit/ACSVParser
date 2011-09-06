@@ -32,7 +32,7 @@ int main( int argc, char *argv[] )
 	csvParser.SetHeaderRow(0);
 	csvParser.SetTypeRow(1);
 	
-	if( !csvParser.ParseFile("input.csv", ACSVParser::Slurp) )
+	if( !csvParser.ParseFile("sample.csv", ACSVParser::Slurp) )
 	{
 		std::cout << "Failed to parse file!" << std::endl;
 		return -1;
