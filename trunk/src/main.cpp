@@ -27,42 +27,42 @@ using namespace acsvparser;
 
 int main( int argc, char *argv[] )
 {
-	ACSVParser csvParser;
+    ACSVParser csvParser;
 
-	// Set the header and data type rows.
-	csvParser.SetHeaderRow(0);
-	csvParser.SetTypeRow(1);
-	
-	if( !csvParser.ParseFile("sample.csv", ACSVParser::Slurp) )
-	{
-		// The cause of the error can be further queried with
-		// csvParser.GetErrorState();
-		std::cout << "Failed to parse file!" << std::endl;
-		return -1;
-	}
+    // Set the header and data type rows.
+    csvParser.SetHeaderRow(0);
+    csvParser.SetTypeRow(1);
+    
+    if( !csvParser.ParseFile("sample.csv", ACSVParser::Slurp) )
+    {
+        // The cause of the error can be further queried with
+        // csvParser.GetErrorState();
+        std::cout << "Failed to parse file!" << std::endl;
+        return -1;
+    }
 
-	// Display parsed content.
-	std::cout << "Parsed data:\n\n";
-	const ACSVParser::DataSizeType noOfRows = csvParser.GetRowCount();
+    // Display parsed content.
+    std::cout << "Parsed data:\n\n";
+    const ACSVParser::DataSizeType noOfRows = csvParser.GetRowCount();
 
-	for(ACSVParser::DataSizeType i = 0; i < noOfRows; ++i)
-	{
-		const ACSVParser::RowDataSizeType noOfCols = 
-							csvParser.GetColumnCount(i);
-		for(ACSVParser::RowDataSizeType j = 0; j < noOfCols; ++j)
-		{
-			std::cout << csvParser[i][j] << ", ";
-		}
-		std::cout << "\n";
-	}
+    for(ACSVParser::DataSizeType i = 0; i < noOfRows; ++i)
+    {
+        const ACSVParser::RowDataSizeType noOfCols = 
+                            csvParser.GetColumnCount(i);
+        for(ACSVParser::RowDataSizeType j = 0; j < noOfCols; ++j)
+        {
+            std::cout << csvParser[i][j] << ", ";
+        }
+        std::cout << "\n";
+    }
 
-	// Get data based on type.
-	const int val = csvParser[0][0].GetInt();
-	std::cout << "Value of (0, 0) is " << val << "\n";
+    // Get data based on type.
+    const int val = csvParser[0][0].GetInt();
+    std::cout << "Value of (0, 0) is " << val << "\n";
 
-	// Get data using known header.
-	std::cout << "Rating for second metahuman is " 
-			  << csvParser.GetContentForHeaderAt("rating", 1).GetFloat();
+    // Get data using known header.
+    std::cout << "Rating for second metahuman is " 
+              << csvParser.GetContentForHeaderAt("rating", 1).GetFloat();
 
-	return 0;
+    return 0;
 }

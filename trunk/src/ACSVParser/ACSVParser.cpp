@@ -1,4 +1,4 @@
-																				
+
 // Copyright (c) 2011 Angelo Rohit Joseph Pulikotil
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,226 +28,226 @@
 using namespace acsvparser;
 
 const bool ACSVParser::ParseFile(const std::string &fileName, 
-							const std::streamsize bufferSize)
+    const std::streamsize bufferSize)
 {
-	ResetState();
+    ResetState();
 
-	bool result = true;
-	std::ifstream inFile(fileName);
-	if ( !inFile )
-	{
-		_errorState = ERRORSTATE_FAILED_TO_OPEN_FILE;
-		return false;
-	}
+    bool result = true;
+    std::ifstream inFile(fileName);
+    if ( !inFile )
+    {
+        _errorState = ERRORSTATE_FAILED_TO_OPEN_FILE;
+        return false;
+    }
 
-	if( bufferSize != ACSVParser::Slurp )
-	{
-		ParseState parseState;
-		StringValueType * const pBuffer = 
-			new StringValueType[static_cast<unsigned int>(bufferSize)];
-		if( !pBuffer )
-		{
-			_errorState = ERRORSTATE_FAILED_TO_ALLOCATE_BUFFER;
-			return false;
-		}
+    if( bufferSize != ACSVParser::Slurp )
+    {
+        ParseState parseState;
+        StringValueType * const pBuffer = 
+            new StringValueType[static_cast<unsigned int>(bufferSize)];
+        if( !pBuffer )
+        {
+            _errorState = ERRORSTATE_FAILED_TO_ALLOCATE_BUFFER;
+            return false;
+        }
 
-		_vVData.clear();
-		while( !inFile.eof() )
-		{
-			std::streamsize sizeRead = 
-					inFile.read(pBuffer, bufferSize).gcount();
+        _vVData.clear();
+        while( !inFile.eof() )
+        {
+            std::streamsize sizeRead = 
+                inFile.read(pBuffer, bufferSize).gcount();
 
-			if( !ParseString(pBuffer, sizeRead, parseState) )
-			{
-				result = false;
-				break;
-			}
-		}
+            if( !ParseString(pBuffer, sizeRead, parseState) )
+            {
+                result = false;
+                break;
+            }
+        }
 
-		if( pBuffer )
-			delete[] pBuffer;
-	}
-	else
-	{
-		// Read entire contents of file into a string.
-		StringType strBuffer;
-		std::copy(	
-			std::istreambuf_iterator<StringValueType>(inFile.rdbuf()),
-			std::istreambuf_iterator<StringValueType>(),
-			std::back_insert_iterator<StringType>( strBuffer )
-			);
+        if( pBuffer )
+            delete[] pBuffer;
+    }
+    else
+    {
+        // Read entire contents of file into a string.
+        StringType strBuffer;
+        std::copy(  
+            std::istreambuf_iterator<StringValueType>(inFile.rdbuf()),
+            std::istreambuf_iterator<StringValueType>(),
+            std::back_insert_iterator<StringType>( strBuffer )
+            );
 
-		if( !ParseString(strBuffer) )
-		{
-			result = false;
-		}
-	}
+        if( !ParseString(strBuffer) )
+        {
+            result = false;
+        }
+    }
 
-	return result;
+    return result;
 }
 
 const bool ACSVParser::ParseString(const ACSVParser::StringType &strContent)
 {
-	ResetState();
-	_vVData.clear();
-	if( !ParseString(strContent.c_str(), strContent.length(), ParseState()) )
-	{
-		return false;
-	}
+    ResetState();
+    _vVData.clear();
+    if( !ParseString(strContent.c_str(), strContent.length(), ParseState()) )
+    {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 const bool ACSVParser::ParseString(const StringValueType * const pStrContent, 
-					const std::streamsize bufferSize, ParseState& parseState)
+    const std::streamsize bufferSize, ParseState& parseState)
 {
-	StringType strData;
-	for( StringType::size_type i = 0; i < bufferSize; ++i )
-	{
-		const StringValueType token = pStrContent[i];
-		
-		if( token == _textDelim )
-		{
-			// Skip and record escaped text delimiters.
-			if( i < (bufferSize - 1) && pStrContent[i + 1] == _textDelim )
-			{
-				strData += token;
-				++i;
-			}
+    StringType strData;
+    for( StringType::size_type i = 0; i < bufferSize; ++i )
+    {
+        const StringValueType token = pStrContent[i];
 
-			parseState.bDidBeginTextDelim = !parseState.bDidBeginTextDelim;
-		}
-		else if( token == _separator && !parseState.bDidBeginTextDelim )
-		{
-			if( _vVData.empty() )
-			{
-				_vVData.push_back(RowDataType());
-			}
-			_vVData.back().push_back(TypeData(strData));
-			strData.clear();
-		}
-		else if( token == _recordSeparator && 
-			!(_shouldAcceptEmbeddedNewlines && parseState.bDidBeginTextDelim))
-		{				
-			if( !strData.empty() )
-			{
-				if( _vVData.empty() )
-				{
-					_vVData.push_back(RowDataType());
-				}
-				_vVData.back().push_back(TypeData(strData));
-				strData.clear();
-			}
+        if( token == _textDelim )
+        {
+            // Skip and record escaped text delimiters.
+            if( i < (bufferSize - 1) && pStrContent[i + 1] == _textDelim )
+            {
+                strData += token;
+                ++i;
+            }
 
-			_vVData.push_back(RowDataType());
-		}
-		else
-		{
-			strData += token;
-		}
-	}
+            parseState.bDidBeginTextDelim = !parseState.bDidBeginTextDelim;
+        }
+        else if( token == _separator && !parseState.bDidBeginTextDelim )
+        {
+            if( _vVData.empty() )
+            {
+                _vVData.push_back(RowDataType());
+            }
+            _vVData.back().push_back(TypeData(strData));
+            strData.clear();
+        }
+        else if( token == _recordSeparator && 
+            !(_shouldAcceptEmbeddedNewlines && parseState.bDidBeginTextDelim))
+        {               
+            if( !strData.empty() )
+            {
+                if( _vVData.empty() )
+                {
+                    _vVData.push_back(RowDataType());
+                }
+                _vVData.back().push_back(TypeData(strData));
+                strData.clear();
+            }
 
-	if( !strData.empty() )
-	{
-		if( _vVData.empty() )
-		{
-			_vVData.push_back(RowDataType());
-		}
-		_vVData.back().push_back(TypeData(strData));
-	}
+            _vVData.push_back(RowDataType());
+        }
+        else
+        {
+            strData += token;
+        }
+    }
 
-	if( _hasTypeRow )
-	{
-		if( !ProcessDataTypes() )
-		{
-			_errorState = ERRORSTATE_FAILED_TO_PROCESS_TYPEDATA;
-			return false;
-		}
-	}
+    if( !strData.empty() )
+    {
+        if( _vVData.empty() )
+        {
+            _vVData.push_back(RowDataType());
+        }
+        _vVData.back().push_back(TypeData(strData));
+    }
 
-	return true;
+    if( _hasTypeRow )
+    {
+        if( !ProcessDataTypes() )
+        {
+            _errorState = ERRORSTATE_FAILED_TO_PROCESS_TYPEDATA;
+            return false;
+        }
+    }
+
+    return true;
 }
 
 ACSVParser::TypeData ACSVParser::GetContentForHeaderAt(
-							const ACSVParser::StringType &headerStr, 
-							const ACSVParser::RowDataSizeType row) const
+    const ACSVParser::StringType &headerStr, 
+    const ACSVParser::RowDataSizeType row) const
 {
-	if( _hasHeaderRow )
-	{
-		const RowDataSizeType actualRow = row + _rowsToSkip;
-		if( _vVData.size() > actualRow)
-		{
-			RowDataType::const_iterator colIter = _vVData[_headerRow].begin();
-			while( colIter != _vVData[_headerRow].end() )
-			{
-				if( colIter->GetString() == headerStr )
-					break;
-				++colIter;
-			}
+    if( _hasHeaderRow )
+    {
+        const RowDataSizeType actualRow = row + _rowsToSkip;
+        if( _vVData.size() > actualRow)
+        {
+            RowDataType::const_iterator colIter = _vVData[_headerRow].begin();
+            while( colIter != _vVData[_headerRow].end() )
+            {
+                if( colIter->GetString() == headerStr )
+                    break;
+                ++colIter;
+            }
 
-			if( colIter != _vVData[_headerRow].end() )
-			{
-				const RowDataSizeType col = 
-					std::distance(_vVData[_headerRow].begin(), colIter);
-				return _vVData[actualRow][col];
-			}
-		}
-	}
+            if( colIter != _vVData[_headerRow].end() )
+            {
+                const RowDataSizeType col = 
+                    std::distance(_vVData[_headerRow].begin(), colIter);
+                return _vVData[actualRow][col];
+            }
+        }
+    }
 
-	return TypeData("");
+    return TypeData("");
 }
 
 ACSVParser::Type ACSVParser::GetTypeAt(const DataSizeType row,
-								const RowDataSizeType col) const
+    const RowDataSizeType col) const
 {
-	if( _hasTypeRow )
-	{
-		const RowDataSizeType actualRow = row + _rowsToSkip;
-		StringType typeStr = _vVData[_typeRow][col].GetString();
-		// Convert typeStr to lowercase.
-		std::transform(typeStr.begin(), typeStr.end(), typeStr.begin(), 
-						::tolower);
+    if( _hasTypeRow )
+    {
+        const RowDataSizeType actualRow = row + _rowsToSkip;
+        StringType typeStr = _vVData[_typeRow][col].GetString();
+        // Convert typeStr to lowercase.
+        std::transform(typeStr.begin(), typeStr.end(), typeStr.begin(), 
+            ::tolower);
 
-		if( typeStr == "bool" )
-			return TYPE_BOOL;
-		else if( typeStr == "uchar" )
-			return TYPE_UCHAR;
-		else if( typeStr == "char" )
-			return TYPE_CHAR;
-		else if( typeStr == "uint" )
-			return TYPE_UINT;
-		else if( typeStr == "int" )
-			return TYPE_INT;
-		else if( typeStr == "float" )
-			return TYPE_FLOAT;
-		else if( typeStr == "double" )
-			return TYPE_DOUBLE;
-		else if( typeStr == "string" )
-			return TYPE_STRING;
-	}
+        if( typeStr == "bool" )
+            return TYPE_BOOL;
+        else if( typeStr == "uchar" )
+            return TYPE_UCHAR;
+        else if( typeStr == "char" )
+            return TYPE_CHAR;
+        else if( typeStr == "uint" )
+            return TYPE_UINT;
+        else if( typeStr == "int" )
+            return TYPE_INT;
+        else if( typeStr == "float" )
+            return TYPE_FLOAT;
+        else if( typeStr == "double" )
+            return TYPE_DOUBLE;
+        else if( typeStr == "string" )
+            return TYPE_STRING;
+    }
 
-	// Unrecognized types default to string.
-	return TYPE_STRING;
+    // Unrecognized types default to string.
+    return TYPE_STRING;
 }
 
 const bool ACSVParser::ProcessDataTypes()
 {
-	if( _hasTypeRow )
-	{
-		const DataSizeType noOfRows = GetRowCount();
-		for(DataSizeType i = 0; i < noOfRows; ++i)
-		{
-			const RowDataSizeType noOfCols = GetColumnCount(i);
-			for(RowDataSizeType j = 0; j < noOfCols; ++j)
-			{
-				TypeData& typeData = _vVData[i + _rowsToSkip][j];	
-				if( !typeData.ProcessDataType(GetTypeAt(i, j)) )
-					return false;
-			}
-		}
+    if( _hasTypeRow )
+    {
+        const DataSizeType noOfRows = GetRowCount();
+        for(DataSizeType i = 0; i < noOfRows; ++i)
+        {
+            const RowDataSizeType noOfCols = GetColumnCount(i);
+            for(RowDataSizeType j = 0; j < noOfCols; ++j)
+            {
+                TypeData& typeData = _vVData[i + _rowsToSkip][j];   
+                if( !typeData.ProcessDataType(GetTypeAt(i, j)) )
+                    return false;
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	return false;
+    return false;
 }
