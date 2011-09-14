@@ -51,7 +51,7 @@ int main( int argc, char *argv[] )
                             csvParser.GetColumnCount(i);
         for(ACSVParser::RowDataSizeType j = 0; j < noOfCols; ++j)
         {
-            std::cout << csvParser[i][j] << ", ";
+            std::wcout << csvParser[i][j] << ", ";
         }
         std::cout << "\n";
     }
@@ -62,7 +62,7 @@ int main( int argc, char *argv[] )
 
     // Get data using known header.
     std::cout << "Rating for second metahuman is " 
-              << csvParser.GetContentForHeaderAt("rating", 1).GetFloat();
+              << csvParser.GetContentForHeaderAt(L"rating", 1).GetFloat();
 
     return 0;
 }

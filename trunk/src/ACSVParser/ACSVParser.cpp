@@ -33,7 +33,7 @@ const bool ACSVParser::ParseFile(const std::string &fileName,
     ResetState();
 
     bool result = true;
-    std::ifstream inFile(fileName);
+    InputFileStreamType inFile(fileName);
     if ( !inFile )
     {
         _errorState = ERRORSTATE_FAILED_TO_OPEN_FILE;
@@ -194,7 +194,7 @@ ACSVParser::TypeData ACSVParser::GetContentForHeaderAt(
         }
     }
 
-    return TypeData("");
+    return TypeData(L"");
 }
 
 ACSVParser::Type ACSVParser::GetTypeAt(const DataSizeType row,
@@ -208,21 +208,19 @@ ACSVParser::Type ACSVParser::GetTypeAt(const DataSizeType row,
         std::transform(typeStr.begin(), typeStr.end(), typeStr.begin(), 
             ::tolower);
 
-        if( typeStr == "bool" )
+        if( typeStr == L"bool" )
             return TYPE_BOOL;
-        else if( typeStr == "uchar" )
-            return TYPE_UCHAR;
-        else if( typeStr == "char" )
-            return TYPE_CHAR;
-        else if( typeStr == "uint" )
+        else if( typeStr == L"wchar" )
+            return TYPE_WCHAR;
+        else if( typeStr == L"uint" )
             return TYPE_UINT;
-        else if( typeStr == "int" )
+        else if( typeStr == L"int" )
             return TYPE_INT;
-        else if( typeStr == "float" )
+        else if( typeStr == L"float" )
             return TYPE_FLOAT;
-        else if( typeStr == "double" )
+        else if( typeStr == L"double" )
             return TYPE_DOUBLE;
-        else if( typeStr == "string" )
+        else if( typeStr == L"string" )
             return TYPE_STRING;
     }
 

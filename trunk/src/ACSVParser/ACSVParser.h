@@ -36,8 +36,10 @@ namespace acsvparser
         /// may be slurped instead of buffered.
         const static std::streamsize Slurp = 0;
     
-        typedef std::string StringType;
+        typedef std::wstring StringType;
         typedef StringType::value_type StringValueType;
+        typedef std::wistringstream InputStringStreamType;
+        typedef std::wifstream InputFileStreamType;        
 
         /// Enumeration of states that indicate the cause of failure
         /// in case of a parser error.
@@ -53,8 +55,7 @@ namespace acsvparser
         enum Type
         {
             TYPE_BOOL       = 0,
-            TYPE_UCHAR,
-            TYPE_CHAR,
+            TYPE_WCHAR,
             TYPE_UINT,
             TYPE_INT,
             TYPE_FLOAT,
@@ -69,8 +70,7 @@ namespace acsvparser
             union RawData
             {
                 bool            boolData;
-                unsigned char   ucharData;
-                char            charData;
+                wchar_t         wcharData;
                 unsigned int    uintData;
                 int             intData;
                 float           floatData;
@@ -94,30 +94,35 @@ namespace acsvparser
              */
             const bool ProcessDataType(const Type type)
             {
-                std::istringstream iss(_stringData);
+                InputStringStreamType iss(_stringData);
                 switch( type )
                 {
                 case TYPE_BOOL:                
                     if( !(iss >> _rawData.boolData) )               
-                        return false;                                 
-                case TYPE_UCHAR:                
-                    if( !(iss >> _rawData.ucharData) )              
-                        return false;                                   
-                case TYPE_CHAR:                
-                    if( !(iss >> _rawData.charData) )               
-                        return false;                                   
+                        return false;   
+                    break;
+                case TYPE_WCHAR:
+                    if( !(iss >> _rawData.wcharData) )
+                        return false;
+                    break;
                 case TYPE_UINT:                
                     if( !(iss >> _rawData.uintData) )               
                         return false;                   
+                    break;
                 case TYPE_INT:                
                     if( !(iss >> _rawData.intData) )                
                         return false;                                   
+                    break;
                 case TYPE_FLOAT:                
                     if( !(iss >> _rawData.floatData) )              
                         return false;                                   
+                    break;
                 case TYPE_DOUBLE:                
                     if( !(iss >> _rawData.doubleData) )             
                         return false;    
+                    break;
+                case TYPE_STRING:
+                    break;
                 default:
                     return false;
                 }
@@ -140,11 +145,8 @@ namespace acsvparser
             /// Returns the data as a bool.
             bool GetBool() const { return _rawData.boolData; }
 
-            /// Returns the data as an unsigned char.
-            unsigned char GetUChar() const { return _rawData.ucharData; }
-
-            /// Returns the data as a char.
-            char GetChar() const { return _rawData.charData; }
+            /// Returns the data as a wide-character.
+            wchar_t GetWChar() const { return _rawData.wcharData; }
 
             /// Returns the data as an unsigned int.
             unsigned int GetUInt() const { return _rawData.uintData; }
@@ -390,7 +392,7 @@ namespace acsvparser
          *  \param typeData the parsed content to be streamed.
          *  \return the output stream.
          */
-        friend std::ostream& operator<<(std::ostream& out, 
+        friend std::wostream& operator<<(std::wostream& out, 
             const TypeData& typeData) 
         {
             out << typeData.GetString();
