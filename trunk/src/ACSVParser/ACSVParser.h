@@ -95,40 +95,31 @@ namespace acsvparser
             const bool ProcessDataType(const Type type)
             {
                 std::istringstream iss(_stringData);
-                if( type == TYPE_BOOL )
+                switch( type )
                 {
+                case TYPE_BOOL:                
                     if( !(iss >> _rawData.boolData) )               
-                        return false;                   
-                }
-                else if( type == TYPE_UCHAR )
-                {
+                        return false;                                 
+                case TYPE_UCHAR:                
                     if( !(iss >> _rawData.ucharData) )              
-                        return false;                   
-                }
-                else if( type == TYPE_CHAR )
-                {
+                        return false;                                   
+                case TYPE_CHAR:                
                     if( !(iss >> _rawData.charData) )               
-                        return false;                   
-                }
-                else if( type == TYPE_UINT )
-                {
+                        return false;                                   
+                case TYPE_UINT:                
                     if( !(iss >> _rawData.uintData) )               
                         return false;                   
-                }
-                else if( type == TYPE_INT )
-                {
+                case TYPE_INT:                
                     if( !(iss >> _rawData.intData) )                
-                        return false;                   
-                }
-                else if( type == TYPE_FLOAT )
-                {
+                        return false;                                   
+                case TYPE_FLOAT:                
                     if( !(iss >> _rawData.floatData) )              
-                        return false;                   
-                }
-                else if( type == TYPE_DOUBLE )
-                {
+                        return false;                                   
+                case TYPE_DOUBLE:                
                     if( !(iss >> _rawData.doubleData) )             
-                        return false;                   
+                        return false;    
+                default:
+                    return false;
                 }
 
                 _type = type;
