@@ -11,7 +11,7 @@ FEATURES:
 -	Rudimentary data type support for a limited set of types.
 
 LIMITATIONS:
--	Currently only supports UTF-8 character set.
+-	Currently only supports UTF-8 and UTF-32 character sets.
 
 TODO:
 -	Add support for different character sets.
