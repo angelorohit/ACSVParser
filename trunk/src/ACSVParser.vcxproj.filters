@@ -17,6 +17,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="sample.csv" />
+    <None Include="sample_utf8.csv" />
+    <None Include="sample_utf32.csv" />
   </ItemGroup>
 </Project>

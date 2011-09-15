@@ -39,6 +39,8 @@ const bool ACSVParser::ParseFile(const std::string &fileName,
         _errorState = ERRORSTATE_FAILED_TO_OPEN_FILE;
         return false;
     }
+    
+    const Encoding encoding = GetEncoding(inFile);
 
     if( bufferSize != ACSVParser::Slurp )
     {
@@ -57,7 +59,7 @@ const bool ACSVParser::ParseFile(const std::string &fileName,
             std::streamsize sizeRead = 
                 inFile.read(pBuffer, bufferSize).gcount();
 
-            if( !ParseString(pBuffer, sizeRead, parseState) )
+            if( !ParseString(pBuffer, sizeRead, parseState, encoding) )
             {
                 result = false;
                 break;
@@ -77,7 +79,7 @@ const bool ACSVParser::ParseFile(const std::string &fileName,
             std::back_insert_iterator<StringType>( strBuffer )
             );
 
-        if( !ParseString(strBuffer) )
+        if( !ParseString(strBuffer, encoding) )
         {
             result = false;
         }
@@ -86,11 +88,17 @@ const bool ACSVParser::ParseFile(const std::string &fileName,
     return result;
 }
 
-const bool ACSVParser::ParseString(const ACSVParser::StringType &strContent)
+const bool ACSVParser::ParseString(const ACSVParser::StringType &strContent,
+                                   const Encoding encoding)
 {
     ResetState();
     _vVData.clear();
-    if( !ParseString(strContent.c_str(), strContent.length(), ParseState()) )
+    if( !ParseString(strContent.c_str(), 
+                     strContent.length(), 
+                     ParseState(),
+                     encoding
+                    )
+      )
     {
         return false;
     }
@@ -99,12 +107,32 @@ const bool ACSVParser::ParseString(const ACSVParser::StringType &strContent)
 }
 
 const bool ACSVParser::ParseString(const StringValueType * const pStrContent, 
-    const std::streamsize bufferSize, ParseState& parseState)
+                                   const std::streamsize bufferSize, 
+                                   ParseState& parseState,
+                                   const Encoding encoding)
 {
+    const unsigned int byteSize = GetEncodingByteSize(encoding);
+
     StringType strData;
-    for( StringType::size_type i = 0; i < bufferSize; ++i )
+    for( StringType::size_type i = 0; i < bufferSize; i += byteSize)
     {
-        const StringValueType token = pStrContent[i];
+        // Convert the token depending on the encoding.
+        StringValueType token = pStrContent[i];
+        if( byteSize == 2 )
+        {                
+            if( encoding == ENC_UTF16LE )
+            {
+                token = token | (pStrContent[i + 1] << (2 << byteSize));
+            }
+            else if( encoding == ENC_UTF16BE )
+            {
+                token = (token << (2 << byteSize)) | pStrContent[i + 1];
+            }
+        }        
+
+        // Skip carriage return
+        if( token == L'\r' )
+            continue;
 
         if( token == _textDelim )
         {
@@ -248,4 +276,56 @@ const bool ACSVParser::ProcessDataTypes()
     }
 
     return false;
+}
+
+const ACSVParser::Encoding ACSVParser::GetEncoding(InputFileStreamType &inFile)
+{    
+    const std::streampos lastPos = inFile.tellg();
+    inFile.seekg(0, std::ios::beg);
+
+    // Read and skip the BOM.
+    const StringValueType bom1 = inFile.get();
+    const StringValueType bom2 = inFile.get();    
+    const StringValueType bom3 = inFile.get();
+
+    Encoding encoding = ENC_UTF8;
+    unsigned int bomToSkip = 0;
+    if( bom1 == 0xEF && bom2 == 0xBB && bom3 == 0xBF )
+    {
+        bomToSkip = 3;
+        encoding = ENC_UTF8;
+    }
+    if( bom1 == 0xFF && bom2 == 0xFE )
+    {
+       bomToSkip = 2;
+       encoding = ENC_UTF16LE;
+    }
+    else if( bom1 == 0xFE && bom2 == 0xFF )
+    {
+        bomToSkip = 2;
+        encoding = ENC_UTF16BE;
+    }
+
+    // Undo the skipping of BOM.
+    inFile.seekg(lastPos, std::ios::beg);
+
+    // Now skip the appropriate amount.
+    inFile.seekg(bomToSkip, std::ios::cur);
+
+    return encoding;    // Default encoding if no BOM is found.
+}
+
+const unsigned int ACSVParser::GetEncodingByteSize(const Encoding encoding)
+{
+    switch(encoding)
+    {
+    case ENC_UTF8:
+        return 1;
+    case ENC_UTF16LE:
+        return 2;
+    case ENC_UTF16BE:
+        return 2;
+    }
+
+    return 1;   // Default
 }

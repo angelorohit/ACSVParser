@@ -31,9 +31,9 @@ int main( int argc, char *argv[] )
 
     // Set the header and data type rows.
     csvParser.SetHeaderRow(0);
-    csvParser.SetTypeRow(1);
+    csvParser.SetTypeRow(1);       
     
-    if( !csvParser.ParseFile("sample.csv", ACSVParser::Slurp) )
+    if( !csvParser.ParseFile("sample_utf8.csv", ACSVParser::Slurp) )
     {
         // The cause of the error can be further queried with
         // csvParser.GetErrorState();
@@ -51,7 +51,8 @@ int main( int argc, char *argv[] )
                             csvParser.GetColumnCount(i);
         for(ACSVParser::RowDataSizeType j = 0; j < noOfCols; ++j)
         {
-            std::wcout << csvParser[i][j] << ", ";
+            // Note: wcout does not print wide characters above 255.
+            wprintf(L"%s, ", csvParser[i][j].GetString().c_str());
         }
         std::cout << "\n";
     }

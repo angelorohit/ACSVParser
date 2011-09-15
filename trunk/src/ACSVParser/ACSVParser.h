@@ -198,12 +198,20 @@ namespace acsvparser
             {}
         };
 
+        /// The supported character set encodings.
+        enum Encoding
+        {
+            ENC_UTF8    = 0,
+            ENC_UTF16LE,
+            ENC_UTF16BE
+        };
+
     public:
         // Constructor / Destructor
         explicit ACSVParser() :
-        _separator(','),
-            _textDelim('\"'),
-            _recordSeparator('\n'),
+            _separator(L','),
+            _textDelim(L'\"'),
+            _recordSeparator(L'\n'),
             _shouldAcceptEmbeddedNewlines(true),
             _headerRow(0),
             _typeRow(0),
@@ -223,10 +231,14 @@ namespace acsvparser
         // Functions
     private:  
         const bool ParseString(const StringValueType * const pStrContent, 
-            const std::streamsize bufferSize, ParseState &parseState);
+                               const std::streamsize bufferSize, 
+                               ParseState &parseState,
+                               const Encoding encoding);
         ACSVParser::Type GetTypeAt(const DataSizeType row,
             const RowDataSizeType col) const;   
         const bool ProcessDataTypes();
+        const Encoding GetEncoding(InputFileStreamType &inFile);
+        const unsigned int GetEncodingByteSize(const Encoding encoding);        
 
     public:
         // Accessors
@@ -320,9 +332,11 @@ namespace acsvparser
         /*! \fn const bool ParseString(const StringType& strContent)
          *  \brief Parses a string as CSV content.
          *  \param strContent the string to be parsed.  
+         *  \param encoding the character set encoding of the string content.
          *  \return true on success and false otherwise.
          */
-        const bool ParseString(const StringType& strContent);
+        const bool ParseString(const StringType& strContent,
+                               const Encoding encoding);
 
         /// Resets the error state of the parser.
         void ResetState() { _errorState = ERRORSTATE_NONE; }
