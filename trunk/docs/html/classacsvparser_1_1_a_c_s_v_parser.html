@@ -32,9 +32,9 @@
   
   <td style="padding-left: 0.5em;">
    <div id="projectname">ACSVParser
-   &#160;<span id="projectnumber">1.0</span>
+   &#160;<span id="projectnumber">1.1</span>
    </div>
-   <div id="projectbrief">A simple CSV format content parser written in standard C++</div>
+   <div id="projectbrief">A simple CSV format content parser written in standard C++.</div>
   </td>
   
   
@@ -97,8 +97,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#friends">Friends</a>  </div>
+<a href="#pub-static-attribs">Static Public Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">acsvparser::ACSVParser Class Reference</div>  </div>
 </div>
@@ -125,21 +124,24 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classacsvparser_1_1_a_c_s_v_parser.html#ae7fa285abd44960c11bc903de4852c6f">Type</a> { <br/>
 &#160;&#160;<b>TYPE_BOOL</b> =  0, 
-<b>TYPE_UCHAR</b>, 
-<b>TYPE_CHAR</b>, 
+<b>TYPE_WCHAR</b>, 
 <b>TYPE_UINT</b>, 
+<b>TYPE_INT</b>, 
 <br/>
-&#160;&#160;<b>TYPE_INT</b>, 
-<b>TYPE_FLOAT</b>, 
+&#160;&#160;<b>TYPE_FLOAT</b>, 
 <b>TYPE_DOUBLE</b>, 
 <b>TYPE_STRING</b>
 <br/>
  }</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of supported field data types. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf5ad6bc99b2955ff66f236c23f389c1"></a><!-- doxytag: member="acsvparser::ACSVParser::StringType" ref="adf5ad6bc99b2955ff66f236c23f389c1" args="" -->
-typedef std::string&#160;</td><td class="memItemRight" valign="bottom"><b>StringType</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7273b18d8d28cf7935a5f4de050bd0f9"></a><!-- doxytag: member="acsvparser::ACSVParser::StringType" ref="a7273b18d8d28cf7935a5f4de050bd0f9" args="" -->
+typedef std::wstring&#160;</td><td class="memItemRight" valign="bottom"><b>StringType</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3b60cdd0500fd3776181611c7287abd"></a><!-- doxytag: member="acsvparser::ACSVParser::StringValueType" ref="aa3b60cdd0500fd3776181611c7287abd" args="" -->
 typedef StringType::value_type&#160;</td><td class="memItemRight" valign="bottom"><b>StringValueType</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a02564023aeb64c497d38961566ab5a29"></a><!-- doxytag: member="acsvparser::ACSVParser::InputStringStreamType" ref="a02564023aeb64c497d38961566ab5a29" args="" -->
+typedef std::wistringstream&#160;</td><td class="memItemRight" valign="bottom"><b>InputStringStreamType</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad0c9706bdf87f864e7f92e9ceaf40c14"></a><!-- doxytag: member="acsvparser::ACSVParser::InputFileStreamType" ref="ad0c9706bdf87f864e7f92e9ceaf40c14" args="" -->
+typedef std::wifstream&#160;</td><td class="memItemRight" valign="bottom"><b>InputFileStreamType</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a37e5cb72301a3d2b87ebd079d1d04e9e"></a><!-- doxytag: member="acsvparser::ACSVParser::RowDataType" ref="a37e5cb72301a3d2b87ebd079d1d04e9e" args="" -->
 typedef std::vector&lt; <a class="el" href="classacsvparser_1_1_a_c_s_v_parser_1_1_type_data.html">TypeData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classacsvparser_1_1_a_c_s_v_parser.html#a37e5cb72301a3d2b87ebd079d1d04e9e">RowDataType</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The type for a single row of parsed data. <br/></td></tr>
@@ -181,8 +183,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the number of initial rows to be skipped when parsing. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classacsvparser_1_1_a_c_s_v_parser.html#a3a0fbb338c0861620aa228a1c5cab9d5">ParseFile</a> (const std::string &amp;fileName, const std::streamsize bufferSize=<a class="el" href="classacsvparser_1_1_a_c_s_v_parser.html#a54d8371e649beda3560c100d4c5e86f7">ACSVParser::Slurp</a>)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses the contents of a CSV file.  <a href="#a3a0fbb338c0861620aa228a1c5cab9d5"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classacsvparser_1_1_a_c_s_v_parser.html#a51b9ca487df50b4735123cdd6293b09e">ParseString</a> (const StringType &amp;strContent)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a string as CSV content.  <a href="#a51b9ca487df50b4735123cdd6293b09e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classacsvparser_1_1_a_c_s_v_parser.html#ae868a257266361dd9fecfb75e713c6f3">ParseString</a> (const StringType &amp;strContent, const Encoding encoding)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a string as CSV content.  <a href="#ae868a257266361dd9fecfb75e713c6f3"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a909cbb60652ffa3e7fa35d67e3d007a2"></a><!-- doxytag: member="acsvparser::ACSVParser::ResetState" ref="a909cbb60652ffa3e7fa35d67e3d007a2" args="()" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classacsvparser_1_1_a_c_s_v_parser.html#a909cbb60652ffa3e7fa35d67e3d007a2">ResetState</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the error state of the parser. <br/></td></tr>
@@ -199,10 +201,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr><td colspan="2"><h2><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const std::streamsize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classacsvparser_1_1_a_c_s_v_parser.html#a54d8371e649beda3560c100d4c5e86f7">Slurp</a> = 0</td></tr>
-<tr><td colspan="2"><h2><a name="friends"></a>
-Friends</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classacsvparser_1_1_a_c_s_v_parser.html#a2b1c6f6dfb821df6b68eba644265d925">operator&lt;&lt;</a> (std::ostream &amp;out, const <a class="el" href="classacsvparser_1_1_a_c_s_v_parser_1_1_type_data.html">TypeData</a> &amp;typeData)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Overloaded operator for output streaming of parsed content.  <a href="#a2b1c6f6dfb821df6b68eba644265d925"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Class that encapsulates a CSV Parser. </p>
@@ -500,16 +498,26 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a51b9ca487df50b4735123cdd6293b09e"></a><!-- doxytag: member="acsvparser::ACSVParser::ParseString" ref="a51b9ca487df50b4735123cdd6293b09e" args="(const StringType &amp;strContent)" -->
+<a class="anchor" id="ae868a257266361dd9fecfb75e713c6f3"></a><!-- doxytag: member="acsvparser::ACSVParser::ParseString" ref="ae868a257266361dd9fecfb75e713c6f3" args="(const StringType &amp;strContent, const Encoding encoding)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const bool acsvparser::ACSVParser::ParseString </td>
+          <td class="memname">cconst bool acsvparser::ACSVParser::ParseString </td>
           <td>(</td>
           <td class="paramtype">const StringType &amp;&#160;</td>
-          <td class="paramname"><em>strContent</em></td><td>)</td>
+          <td class="paramname"><em>strContent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const Encoding&#160;</td>
+          <td class="paramname"><em>encoding</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div>
@@ -519,6 +527,7 @@ Friends</h2></td></tr>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">strContent</td><td>the string to be parsed. </td></tr>
+    <tr><td class="paramname">encoding</td><td>the character set encoding of the string content. </td></tr>
   </table>
   </dd>
 </dl>
@@ -544,44 +553,6 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<hr/><h2>Friends And Related Function Documentation</h2>
-<a class="anchor" id="a2b1c6f6dfb821df6b68eba644265d925"></a><!-- doxytag: member="acsvparser::ACSVParser::operator&lt;&lt;" ref="a2b1c6f6dfb821df6b68eba644265d925" args="(std::ostream &amp;out, const TypeData &amp;typeData)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::ostream &amp; operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>out</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classacsvparser_1_1_a_c_s_v_parser_1_1_type_data.html">TypeData</a> &amp;&#160;</td>
-          <td class="paramname"><em>typeData</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [friend]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Overloaded operator for output streaming of parsed content. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">out</td><td>the output stream to be put to. </td></tr>
-    <tr><td class="paramname">typeData</td><td>the parsed content to be streamed. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>the output stream. </dd></dl>
-
-</div>
-</div>
 <hr/><h2>Member Data Documentation</h2>
 <a class="anchor" id="a54d8371e649beda3560c100d4c5e86f7"></a><!-- doxytag: member="acsvparser::ACSVParser::Slurp" ref="a54d8371e649beda3560c100d4c5e86f7" args="" -->
 <div class="memitem">
@@ -598,8 +569,8 @@ Friends</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>trunk/src/ACSVParser/<a class="el" href="_a_c_s_v_parser_8h_source.html">ACSVParser.h</a></li>
-<li>trunk/src/ACSVParser/ACSVParser.cpp</li>
+<li>C:/MyStuff/Projects/ACSVParser/trunk/src/ACSVParser/<a class="el" href="_a_c_s_v_parser_8h_source.html">ACSVParser.h</a></li>
+<li>C:/MyStuff/Projects/ACSVParser/trunk/src/ACSVParser/ACSVParser.cpp</li>
 </ul>
 </div>
 </div>
@@ -612,7 +583,7 @@ Friends</h2></td></tr>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -622,7 +593,7 @@ Friends</h2></td></tr>
 </div>
 
 
-    <li class="footer">Generated on Thu Sep 8 2011 23:57:54 for ACSVParser by
+    <li class="footer">Generated on Thu Sep 15 2011 23:39:33 for ACSVParser by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.5.1 </li>
    </ul>

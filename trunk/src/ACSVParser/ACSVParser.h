@@ -329,7 +329,8 @@ namespace acsvparser
         const bool ParseFile(const std::string &fileName, 
             const std::streamsize bufferSize = ACSVParser::Slurp);
 
-        /*! \fn const bool ParseString(const StringType& strContent)
+        /*! \fn cconst bool ParseString(const StringType& strContent,
+         *                              const Encoding encoding);
          *  \brief Parses a string as CSV content.
          *  \param strContent the string to be parsed.  
          *  \param encoding the character set encoding of the string content.
@@ -397,21 +398,7 @@ namespace acsvparser
          *  \return the content.
          */
         const RowDataType& operator[](const DataSizeType row) const
-        { return _vVData[row + _rowsToSkip]; }
-
-        /*! \fn friend std::ostream& operator<<(std::ostream& out, 
-                const TypeData& typeData) 
-         *  \brief Overloaded operator for output streaming of parsed content.
-         *  \param out the output stream to be put to.
-         *  \param typeData the parsed content to be streamed.
-         *  \return the output stream.
-         */
-        friend std::wostream& operator<<(std::wostream& out, 
-            const TypeData& typeData) 
-        {
-            out << typeData.GetString();
-            return out;
-        }
+        { return _vVData[row + _rowsToSkip]; }        
     };
 }   // namespace acsvparser
 

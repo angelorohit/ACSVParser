@@ -8,7 +8,7 @@ var NAVTREE =
     [ "Class Index", "classes.html", null ],
     [ "Class Members", "functions.html", null ],
     [ "File List", "files.html", [
-      [ "trunk/src/ACSVParser/ACSVParser.h", null, null ]
+      [ "C:/MyStuff/Projects/ACSVParser/trunk/src/ACSVParser/ACSVParser.h", null, null ]
     ] ]
   ] ]
 ];
